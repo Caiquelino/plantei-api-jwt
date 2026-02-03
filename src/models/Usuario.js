@@ -14,6 +14,11 @@ const Usuario = sequelize.define(
     nome: {
       type: DataTypes.STRING(150),
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Nome é obrigatório",
+        },
+      },
     },
 
     email: {
@@ -21,35 +26,59 @@ const Usuario = sequelize.define(
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true,
+        notEmpty: {
+          msg: "Email é obrigatório",
+        },
+        isEmail: {
+          msg: "Email inválido",
+        },
       },
     },
 
     cpf: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(11),
       allowNull: false,
       unique: true,
       validate: {
-        len: [11, 11],
-        msg: "O CPF deve conter exatamente 11 dígitos",
+        len: {
+          args: [11, 11],
+          msg: "O CPF deve conter exatamente 11 dígitos",
+        },
+        notEmpty: {
+          msg: "CPF é obrigatório",
+        },
       },
     },
 
-   /*  data_nascimento: {
+    data_nascimento: {
       type: DataTypes.DATEONLY,
       allowNull: false,
-    }, */
+      validate: {
+        notEmpty: {
+          msg: "Data de nascimento é obrigatória",
+        },
+        isDate: {
+          msg: "Data de nascimento inválida",
+        },
+      },
+    },
 
     senha: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        len: {
+          args: [6, 100],
+          msg: "A senha deve ter no mínimo 6 caracteres",
+        },
+      },
     },
   },
   {
     tableName: "usuarios",
     timestamps: true,
 
-    /* hooks: {
+    hooks: {
       beforeCreate: async (usuario) => {
         if (usuario.senha) {
           usuario.senha = await bcrypt.hash(usuario.senha, 10);
@@ -60,7 +89,7 @@ const Usuario = sequelize.define(
           usuario.senha = await bcrypt.hash(usuario.senha, 10);
         }
       },
-    }, */
+    },
   }
 );
 
