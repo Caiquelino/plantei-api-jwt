@@ -78,7 +78,7 @@ const Usuario = sequelize.define(
     tableName: "usuarios",
     timestamps: true,
 
-    hooks: {
+    /* hooks: {
       beforeCreate: async (usuario) => {
         if (usuario.senha) {
           usuario.senha = await bcrypt.hash(usuario.senha, 10);
@@ -89,7 +89,7 @@ const Usuario = sequelize.define(
           usuario.senha = await bcrypt.hash(usuario.senha, 10);
         }
       },
-    },
+    }, */
   }
 );
 

@@ -1,5 +1,8 @@
 import Usuario from "../models/Usuario.js";
-import { gerarHash } from "../utils/hash.js";
+import jwt from "jsonwebtoken";
+import jwtConfig from "../config/jwt.js";
+import { compararHash, gerarHash } from "../utils/hash.js";
+
 
 export const registrarUsuario = async (payload) => {
     const senhaHash = await gerarHash(payload.senha);
@@ -10,11 +13,13 @@ export const registrarUsuario = async (payload) => {
     });
 }   
 
-export const autenticarUsuario = async (email, senha) => {
+export const autenticarUsuario = async ({ email, senha }) => {
     const usuario = await Usuario.findOne({ where: { email } });
+
     if (!usuario) throw new Error("Usuário ou senha inválidos");
 
     const senhaValida = await compararHash(senha, usuario.senha);
+
     if (!senhaValida) throw new Error("Usuário ou senha inválidos");
 
     const token = jwt.sign(

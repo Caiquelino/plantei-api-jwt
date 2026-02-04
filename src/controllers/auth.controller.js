@@ -17,9 +17,18 @@ export default {
 
   async login(req, res) {
     try {
-      const result = await authService.login(req.body);
+      const { token, usuario } = await authService.autenticarUsuario(req.body);
 
-      return res.status(200).json(result);
+      return res.json({
+        token,
+        usuario: {
+          id: usuario.id,
+          nome: usuario.nome,
+          email: usuario.email,
+        },
+
+        mensagem: "Login realizado com sucesso",
+      });
     } catch (err) {
       return res.status(401).json({ erro: err.message });
     }
